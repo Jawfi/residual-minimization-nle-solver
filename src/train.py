@@ -164,8 +164,7 @@ def train_experiment(config: ExperimentConfig) -> tuple[nn.Module, dict[str, flo
                     batch_offsets,
                 )
             else:
-                loss = torch.mean((predictions - batch_solutions).square())
-
+                loss = torch.sum((predictions - batch_solutions).square(), dim=-1).mean()
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
