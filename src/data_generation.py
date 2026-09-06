@@ -36,16 +36,16 @@ def F_eval(x, A, b):
     """Residual F(x; A, b) = x - Phi(x; A, b)."""
     return x - Phi(x, A, b)
 
-def generate_dataset(n, N, seed, iters=150):
-    """Generate N instances of the dimension-n system and their unique
-    reference solutions x*, computed by `iters` fixed-point iterations
-    starting from the zero vector (Section 3.4, Equation 10)."""
+def generate_dataset(n, num_samples, seed, iterations=150):
+    """Generate `num_samples` instances of the dimension-n system and their
+    unique reference solutions x*, computed by `iterations` fixed-point
+    iterations starting from the zero vector (Section 3.4, Equation 10)."""
     rng = np.random.default_rng(seed)
-    A = rng.uniform(0.5, 2.0, size=(N, n, 2))
-    b = rng.uniform(-1.0, 1.0, size=(N, n))
-    x = np.zeros((N, n))
-    for _ in range(iters):
+    A = rng.uniform(0.5, 2.0, size=(num_samples, n, 2))
+    b = rng.uniform(-1.0, 1.0, size=(num_samples, n))
+    x = np.zeros((num_samples, n))
+    for _ in range(iterations):
         x = Phi(x, A, b)
     x_true = x
-    p = np.concatenate([A.reshape(N, -1), b], axis=1)
+    p = np.concatenate([A.reshape(num_samples, -1), b], axis=1)
     return p.astype(np.float32), x_true.astype(np.float32), A.astype(np.float32), b.astype(np.float32)
